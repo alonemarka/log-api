@@ -3,11 +3,12 @@ import os
 
 app = Flask(__name__)
 
-LOG_FILE = "logs.txt"
+# Log dosyasının yolu (Render'da /app/logs.txt olacak)
+LOG_FILE = "/app/logs.txt"
 
 def search_logs(keyword):
     if not os.path.exists(LOG_FILE):
-        return {"error": "logs.txt dosyası bulunamadı!", "results": []}
+        return {"error": "logs.txt dosyası bulunamadı", "results": []}
     
     results = []
     with open(LOG_FILE, "r", encoding="utf-8", errors="ignore") as f:
@@ -22,16 +23,12 @@ def search_logs(keyword):
         "status": "success",
         "keyword": keyword,
         "total_found": len(results),
-        "results": results[:100]   # Maksimum 100 sonuç
+        "results": results[:150]
     }
 
 @app.route('/')
 def home():
-    return """
-    <h1>Log API Çalışıyor ✅</h1>
-    <p>Kullanım: /kelime</p>
-    <p>Örnek: <a href="/netflix">/netflix</a> veya <a href="/spotify">/spotify</a></p>
-    """
+    return "Log API Çalışıyor! Örnek: /netflix"
 
 @app.route('/<keyword>')
 def search(keyword):
